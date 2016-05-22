@@ -39,6 +39,7 @@ public class Game extends LinearLayout {
 
     private int transparency;
     private boolean gameOver = false;
+    private int difficulty = 1;
 
     private boolean screenPressed = false;
 
@@ -98,7 +99,13 @@ public class Game extends LinearLayout {
             // Assigner taille
             texteCalculus.setFini(false);
             scorePasEncoreCompte=true;
-            if (score.getScore() >= 3 ) block.setNumbers(3);
+            if (score.getScore() >= 3 && score.getScore() <= 8 ) {
+                block.setNumbers(3);
+                difficulty = 2;
+            }
+            if (score.getScore() >= 9 ) {
+                difficulty = 3;
+            }
 
             generateRandomExpression();
             generateBlockPlacement();
@@ -145,8 +152,8 @@ public class Game extends LinearLayout {
 
     public void generateRandomExpression(){
         random = (int) (Math.random()* 20); // First number (0,1,2,...,20)
-        random2 = (int) (Math.random()* 1); // Artithmetic expression (+, -, *, /)
-        random3 = (int) (Math.random()* 5); // Second number
+        random2 = (int) (Math.random()* difficulty); // Artithmetic expression (+, -, *, /)
+        random3 = (int) (Math.random()* 5 * difficulty); // Second number
 
         result = texteCalculus.setExpression(random, random2, random3);
 
@@ -218,6 +225,7 @@ public class Game extends LinearLayout {
         block.setNewLevel(true);
         block.restart();
         pipe.restart();
+        difficulty = 1;
         gameOver = false;
     }
 }

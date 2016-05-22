@@ -29,7 +29,7 @@ public class TextCalculus implements Sprite{
     protected int[] drawable_symbols = new int[]{ R.drawable.plus};
 
     protected int[] expression = new int[] {0,0,0}; */
-    protected String[] symbols = new String[] {"+"};
+    protected String[] symbols = new String[] {"+", "-", "*", "/"};
     protected String expression;
 
     public TextCalculus (Context c, int w, int h){
@@ -78,10 +78,11 @@ public class TextCalculus implements Sprite{
         expression += symbols[e1];
         expression += Integer.toString(c2);
 
-        if(symbols[e1].equals("+"))
-            return c1+c2;
-        else
-            return 0;
+        if(symbols[e1].equals("+")) return c1+c2;
+        else if(symbols[e1].equals("-")) return c1-c2;
+        else if(symbols[e1].equals("*")) return c1*c2;
+        else if(symbols[e1].equals("/")) return c1/c2;
+        else return 0;
     }
 
     public void setFini(boolean b){
