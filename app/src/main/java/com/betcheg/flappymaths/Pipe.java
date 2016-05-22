@@ -17,7 +17,7 @@ public class Pipe implements Sprite {
     int x;
     int screen_width;
     int screen_height;
-    int space = 100;
+    int space;
     Drawable pipe;
     Drawable pipe2;
     boolean newLevel = false;
@@ -27,6 +27,7 @@ public class Pipe implements Sprite {
         this.width = 80;
         this.p1height = h/5;
         this.p2height = h/5;
+        this.space = w/4;
         x = w + space;
         screen_width = w;
         screen_height = h;
