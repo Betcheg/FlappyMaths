@@ -51,8 +51,18 @@ public class Bird implements Sprite {
         i=i%3;
     }
 
+    public void setCurrentHeight(int h){
+        this.current_height = h;
+    }
+
     public int getX() {
         return x;
+    }
+    public int getWidth() {
+        return width_bird;
+    }
+    public int getY() {
+        return current_height;
     }
 
     public void jump() {

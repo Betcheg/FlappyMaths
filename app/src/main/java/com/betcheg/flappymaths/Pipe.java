@@ -56,4 +56,8 @@ public class Pipe implements Sprite {
         this.p1height = p1;
         this.p2height = p2;
     }
+
+    public void resetX() {
+        this.x = screen_width + space;
+    }
 }

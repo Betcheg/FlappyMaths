@@ -3,6 +3,7 @@ package com.betcheg.flappymaths;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 
 /**
@@ -19,13 +20,17 @@ public class TextCalculus implements Sprite{
     Drawable e1;
     Drawable c2;
     boolean fini = false;
+    Paint sharedPaint;
 
+    /*
     protected int[] drawable_numbers = new int[]{ R.drawable.zero , R.drawable.one, R.drawable.two,
             R.drawable.three, R.drawable.four, R.drawable.five, R.drawable.six, R.drawable.seven, R.drawable.eight, R.drawable.nine};
 
     protected int[] drawable_symbols = new int[]{ R.drawable.plus};
 
-    protected int[] expression = new int[] {0,0,0};
+    protected int[] expression = new int[] {0,0,0}; */
+    protected String[] symbols = new String[] {"+"};
+    protected String expression;
 
     public TextCalculus (Context c, int w, int h){
         this.c = c;
@@ -39,6 +44,7 @@ public class TextCalculus implements Sprite{
     @Override
     public void onDraw(Canvas canvas) {
         if (!fini) {
+          /*
             c1 = c.getResources().getDrawable(drawable_numbers[expression[0]]);
             e1 = c.getResources().getDrawable(drawable_symbols[expression[1]]);
             c2 = c.getResources().getDrawable(drawable_numbers[expression[2]]);
@@ -49,15 +55,33 @@ public class TextCalculus implements Sprite{
 
             c1.draw(canvas);
             e1.draw(canvas);
-            c2.draw(canvas);
+            c2.draw(canvas); */
+
+            // sharedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            sharedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            sharedPaint.setTextAlign(Paint.Align.CENTER);
+            sharedPaint.setTextSize(width + 40);
+            sharedPaint.setColor(0xFFFFFFFF);
+            sharedPaint.setShadowLayer(2, -1, -1, 0xFF000000);
+            canvas.drawText(expression, screen_width / 2, screen_height / 2,
+                    sharedPaint);
+            sharedPaint.setShadowLayer(2, 1, 1, 0xFF000000);
+            canvas.drawText(expression, screen_width / 2, screen_height / 2,
+                    sharedPaint);
 
         }
     }
 
-    public void setExpression(int c1, String e1, int c2){
-        expression[0] = c1;
-        if(e1 == "+") expression[1] = 0;
-        expression[2] = c2;
+    public int setExpression(int c1, int e1, int c2){
+        expression = "";
+        expression += Integer.toString(c1);
+        expression += symbols[e1];
+        expression += Integer.toString(c2);
+
+        if(symbols[e1].equals("+"))
+            return c1+c2;
+        else
+            return 0;
     }
 
     public void setFini(boolean b){
