@@ -61,6 +61,13 @@ public class Bird implements Sprite {
     public int getWidth() {
         return width_bird;
     }
+
+    public int getHeight() {
+        return height_bird;
+    }
+
+
+
     public int getY() {
         return current_height;
     }

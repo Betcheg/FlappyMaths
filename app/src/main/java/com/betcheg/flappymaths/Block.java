@@ -23,13 +23,13 @@ public class Block implements Sprite{
     int values[] = new int[] {0,0,0};
     int goodValue;
     int blockWithGoodValue;
-
+    double speed;
     Paint sharedPaint;
 
     protected int[] drawable_numbers = new int[]{ R.drawable.zero , R.drawable.one, R.drawable.two,
             R.drawable.three, R.drawable.four, R.drawable.five, R.drawable.six, R.drawable.seven, R.drawable.eight, R.drawable.nine};
 
-    int numbers = 3;
+    int numbers = 2;
     boolean outofCamera = true;
     boolean fixedValue = false;
     boolean newLevel = true;
@@ -50,7 +50,7 @@ public class Block implements Sprite{
         x = w + space;
         screen_width = w;
         screen_height = h;
-
+        speed = (0.005)*screen_width;
         drawable_blocks = new Drawable[]{c.getResources().getDrawable(blocks[0]),
                 c.getResources().getDrawable(blocks[1]),
                 c.getResources().getDrawable(blocks[2])};
@@ -69,14 +69,14 @@ public class Block implements Sprite{
         drawable_blocks[1].draw(canvas);
         if (numbers == 3)  drawable_blocks[2].draw(canvas);
 
-            x -= (0.005)*screen_width;
+            x -= speed;
         if(x<-width) {
             x = screen_width + space;
             newLevel = true;
         }
 
         // Draw text
-        for (int i=0; i<3; i++) {
+        for (int i=0; i<numbers; i++) {
             sharedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             sharedPaint.setTextAlign(Paint.Align.CENTER);
             sharedPaint.setTextSize(30);
@@ -121,6 +121,11 @@ public class Block implements Sprite{
     public void setStartY(int y){
         this.startY = y;
     }
+
+    public void setNumbers(int n){
+        this.numbers = n;
+    }
+
     public void setNewLevel(boolean n){
         this.newLevel = n;
     }
@@ -153,5 +158,13 @@ public class Block implements Sprite{
         if(this.values[0] == g) blockWithGoodValue = 0;
         if(this.values[1] == g) blockWithGoodValue = 1;
         if(this.values[2] == g) blockWithGoodValue = 2;
+    }
+
+    public void stop(){
+        this.speed = 0;
+    }
+
+    public void restart(){
+        this.speed = (0.005)*screen_width;
     }
 }

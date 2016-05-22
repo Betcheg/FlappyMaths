@@ -34,7 +34,11 @@ public class Game extends LinearLayout {
     private int random;
     private int random2;
     private int random3;
+    private int random4;
     private int result;
+
+    private int transparency;
+    private boolean gameOver = false;
 
     private boolean screenPressed = false;
 
@@ -72,10 +76,11 @@ public class Game extends LinearLayout {
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        if(event.getAction() == MotionEvent.ACTION_DOWN && screenPressed == false)
+        if(event.getAction() == MotionEvent.ACTION_DOWN && screenPressed == false && !gameOver)
         {
             screenPressed = true;
-            bird.jump();
+            // The bird should not jump higher than screen size + jump size
+            if(bird.getY() > -bird.getHeight()) bird.jump();
         }
 
         else if(event.getAction() == MotionEvent.ACTION_UP) {
@@ -93,6 +98,8 @@ public class Game extends LinearLayout {
             // Assigner taille
             texteCalculus.setFini(false);
             scorePasEncoreCompte=true;
+            if (score.getScore() >= 3 ) block.setNumbers(3);
+
             generateRandomExpression();
             generateBlockPlacement();
             generateBlockColors();
@@ -111,14 +118,27 @@ public class Game extends LinearLayout {
             sprite.onDraw(canvas);
         }
 
-        if (bird.getX()+bird.getWidth() >= block.getX() && bird.getX() <= block.getX()+block.getWidth()) {
-            if (!(bird.getY() >= block.getYnoCollision() && bird.getY() < block.getYnoCollision() + block.getHeight())) {
-                gameOver();
+        if(!gameOver) {
+            if (bird.getX() + bird.getWidth() >= block.getX() && bird.getX() <= block.getX() + block.getWidth()) {
+                if (!(bird.getY() >= block.getYnoCollision() - ((int) 0.33 * bird.getHeight()) && bird.getY() < block.getYnoCollision() + block.getHeight())) {
+                    gameOver = true;
+                    transparency = 255;
+                    block.stop();
+                    pipe.stop();
+                }
+            }
+            if (bird.getX() >= block.getX() + block.getWidth() && scorePasEncoreCompte) {
+                score.setScore(score.getScore() + 1);
+                scorePasEncoreCompte = false;
             }
         }
-        if ( bird.getX() >= block.getX()+block.getWidth() && scorePasEncoreCompte){
-            score.setScore(score.getScore()+1);
-            scorePasEncoreCompte = false;
+        else {
+            canvas.drawColor(Color.argb(transparency, 255, 255, 255));
+            transparency -=20;
+            if(transparency < 0) transparency = 0;
+            if (bird.getY() > SCREEN_HEIGHT){
+                gameOver();
+            }
         }
         invalidate(); // Will loop onDraw
     }
@@ -130,18 +150,41 @@ public class Game extends LinearLayout {
 
         result = texteCalculus.setExpression(random, random2, random3);
 
-        random = (int) (Math.random()* 2);
-        random2 = (int) (Math.random()* 9);
+        random = (int) (Math.random()* block.getNumbers());
 
+        // Random false number
+        random2 = (int) (Math.random()* 9) +1;
         while(random2 == result){
-            random2 = (int) (Math.random()* 9);
+            random2 = (int) (Math.random()* 9) +1;
         }
 
-        if (random%2 == 0 )
-            block.setValues(result, result-random2, result+(random2/2)+1);
-        else
-            block.setValues(result-random2, result+(random2/2)+1, result);
+        // Random false number 2
+        random3 = (int) (Math.random()* 9) +1;
+        while(random3 == result || random3 == random2){
+            random3 = (int) (Math.random()* 9) +1;
+        }
 
+        if (random%block.getNumbers() == 0 ) {
+            random = (int) Math.random()*2;
+            random = random*2 - 1;
+            random4 = (int) Math.random()*2;
+            random4 = random4*2 - 1;
+            block.setValues(result, result + random*random2, result + random4*random3);
+        }
+        else if (random%block.getNumbers() == 1 ) {
+            random = (int) Math.random()*2;
+            random = random*2 - 1;
+            random4 = (int) Math.random()*2;
+            random4 = random4*2 - 1;
+            block.setValues(result + random*random2,result, result + random4*random3);
+        }
+        else {
+            random = (int) Math.random()*2;
+            random = random*2 - 1;
+            random4 = (int) Math.random()*2;
+            random4 = random4*2 - 1;
+            block.setValues(result + random*random2, result + random4*random3, result);
+        }
         block.setGoodValue(result);
     }
 
@@ -170,7 +213,11 @@ public class Game extends LinearLayout {
         bird.jump();
         score.setScore(0);
         block.resetX();
+        block.setNumbers(2);
         pipe.resetX();
         block.setNewLevel(true);
+        block.restart();
+        pipe.restart();
+        gameOver = false;
     }
 }

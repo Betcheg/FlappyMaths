@@ -18,6 +18,7 @@ public class Pipe implements Sprite {
     int screen_width;
     int screen_height;
     int space;
+    double speed;
     Drawable pipe;
     Drawable pipe2;
     boolean newLevel = false;
@@ -31,6 +32,7 @@ public class Pipe implements Sprite {
         x = w + space;
         screen_width = w;
         screen_height = h;
+        speed = (0.005)*screen_width;
     }
 
     @Override
@@ -38,10 +40,10 @@ public class Pipe implements Sprite {
         pipe = c.getResources().getDrawable(R.drawable.stone);
         pipe2 = c.getResources().getDrawable(R.drawable.stone);
         pipe.setBounds(x,-3, x+width, p1height);
-        pipe2.setBounds(x, screen_height-p2height, x + width, screen_height+3);
+        pipe2.setBounds(x, screen_height -p2height, x + width, screen_height+3);
         pipe.draw(canvas);
         pipe2.draw(canvas);
-        x -= (0.005)*screen_width;
+        x -= speed;
         if(x<-width) {
             x = screen_width + space;
             newLevel = true;
@@ -59,5 +61,13 @@ public class Pipe implements Sprite {
 
     public void resetX() {
         this.x = screen_width + space;
+    }
+
+    public void stop(){
+        this.speed = 0;
+    }
+
+    public void restart(){
+        this.speed = (0.005)*screen_width;
     }
 }
