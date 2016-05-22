@@ -14,9 +14,10 @@ public class Bird implements Sprite {
     int height_bird;
     int width_bird;
     int current_height;
-    int velocity;
+    float velocity = 1;
     Context c;
     float i;
+    Drawable bird;
 
     protected int[] birds = new int[]{ R.drawable.img_bird_red_1, R.drawable.img_bird_red_2,
             R.drawable.img_bird_red_3 };
@@ -35,11 +36,26 @@ public class Bird implements Sprite {
 
     @Override
     public void onDraw(Canvas canvas) {
-        Drawable bird = c.getResources().getDrawable(birds[(int)i]);
+        bird = c.getResources().getDrawable(birds[(int)i]);
         bird.setBounds(x, current_height, x + width_bird, current_height + height_bird);
         bird.draw(canvas);
 
+        if (velocity < 0)
+            current_height += (velocity*velocity);
+        else
+            current_height -= (velocity*velocity);
+
+        velocity -= 0.085;
+
         i+=0.2; // Trick so the animation isn't too fast, it is 5 times slower than it should
         i=i%3;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void jump() {
+        this.velocity= (float) 2.3;
     }
 }

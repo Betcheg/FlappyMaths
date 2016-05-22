@@ -14,6 +14,7 @@ public class Background implements Sprite {
     Context c;
     int width;
     int height;
+    Drawable background;
 
     public Background(Context c, int w, int h){
         this.c = c;
@@ -23,8 +24,8 @@ public class Background implements Sprite {
 
     @Override
     public void onDraw(Canvas canvas) {
-        Drawable background = c.getResources().getDrawable(R.drawable.bg_general_day);
-        background.setBounds(0,0, width, height);
+        background = c.getResources().getDrawable(R.drawable.blue_grass);
+        background.setBounds(0, 0, width, height);
         background.draw(canvas);
 
     }
