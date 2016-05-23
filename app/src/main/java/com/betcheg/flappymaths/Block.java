@@ -25,6 +25,7 @@ public class Block implements Sprite{
     int blockWithGoodValue;
     double speed;
     Paint sharedPaint;
+    boolean visible = true;
 
     protected int[] drawable_numbers = new int[]{ R.drawable.zero , R.drawable.one, R.drawable.two,
             R.drawable.three, R.drawable.four, R.drawable.five, R.drawable.six, R.drawable.seven, R.drawable.eight, R.drawable.nine};
@@ -76,19 +77,20 @@ public class Block implements Sprite{
         }
 
         // Draw text
-        for (int i=0; i<numbers; i++) {
-            sharedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            sharedPaint.setTextAlign(Paint.Align.CENTER);
-            sharedPaint.setTextSize(30);
-            sharedPaint.setColor(0xFFFFFFFF);
-            sharedPaint.setShadowLayer(2, -1, -1, 0xFF000000);
-            canvas.drawText(Integer.toString(values[i]), x + width / 2, startY + i * height + height / 2,
-                    sharedPaint);
-            sharedPaint.setShadowLayer(2, 1, 1, 0xFF000000);
-            canvas.drawText(Integer.toString(values[i]), x+width/2, startY + i*height + height/2,
-                    sharedPaint);
+        if(visible) {
+            for (int i = 0; i < numbers; i++) {
+                sharedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                sharedPaint.setTextAlign(Paint.Align.CENTER);
+                sharedPaint.setTextSize(30);
+                sharedPaint.setColor(0xFFFFFFFF);
+                sharedPaint.setShadowLayer(2, -1, -1, 0xFF000000);
+                canvas.drawText(Integer.toString(values[i]), x + width / 2, startY + i * height + height / 2,
+                        sharedPaint);
+                sharedPaint.setShadowLayer(2, 1, 1, 0xFF000000);
+                canvas.drawText(Integer.toString(values[i]), x + width / 2, startY + i * height + height / 2,
+                        sharedPaint);
+            }
         }
-
     }
 
     public int getX() {
@@ -128,6 +130,10 @@ public class Block implements Sprite{
 
     public void setNewLevel(boolean n){
         this.newLevel = n;
+    }
+
+    public void setVisibility(boolean v){
+        this.visible = v;
     }
 
     public void setColors(int c1, int c2, int c3){

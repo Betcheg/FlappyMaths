@@ -1,6 +1,7 @@
 package com.betcheg.flappymaths;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -140,20 +141,12 @@ public class Game extends LinearLayout {
         if(!gameOver) {
             if (bird.getX() + bird.getWidth() >= block.getX() && bird.getX() <= block.getX() + block.getWidth()) {
                 if (!(bird.getY() >= block.getYnoCollision() - ((int) 0.33 * bird.getHeight()) && bird.getY() < block.getYnoCollision() + block.getHeight())) {
-                    gameOver = true;
-                    transparency = 255;
-                    block.stop();
-                    pipe.stop();
-                    texteCalculus.setFini(true);
+                    gameOver();
                 }
             }
 
             if(bird.getY() > SCREEN_HEIGHT)  {
-                gameOver = true;
-                transparency = 255;
-                block.stop();
-                pipe.stop();
-                texteCalculus.setFini(true);
+                gameOver();
             }
 
             if (bird.getX() >= block.getX() + block.getWidth() && scorePasEncoreCompte) {
@@ -164,6 +157,8 @@ public class Game extends LinearLayout {
         else {
             flashScreen(canvas);
             if (bird.getY() > SCREEN_HEIGHT){
+                score.setVisibility(false);
+                block.setVisibility(false);
                 if (!buttons.isAnimated()) buttons.animate();
             }
         }
@@ -196,21 +191,21 @@ public class Game extends LinearLayout {
             random = random*2 - 1;
             random4 = (int) Math.random()*2;
             random4 = random4*2 - 1;
-            block.setValues(result, result + random*random2, result + random4*random3);
+            block.setValues(result, result + random * random2, result + random4 * random3);
         }
         else if (random%block.getNumbers() == 1 ) {
             random = (int) Math.random()*2;
             random = random*2 - 1;
             random4 = (int) Math.random()*2;
             random4 = random4*2 - 1;
-            block.setValues(result + random*random2,result, result + random4*random3);
+            block.setValues(result + random * random2, result, result + random4 * random3);
         }
         else {
             random = (int) Math.random()*2;
             random = random*2 - 1;
             random4 = (int) Math.random()*2;
             random4 = random4*2 - 1;
-            block.setValues(result + random*random2, result + random4*random3, result);
+            block.setValues(result + random * random2, result + random4 * random3, result);
         }
         block.setGoodValue(result);
     }
@@ -247,6 +242,8 @@ public class Game extends LinearLayout {
         pipe.restart();
         difficulty = 1;
         buttons.reset();
+        score.setVisibility(true);
+        block.setVisibility(true);
         gameOver = false;
     }
 
@@ -254,5 +251,14 @@ public class Game extends LinearLayout {
         canvas.drawColor(Color.argb(transparency, 255, 255, 255));
         transparency -=20;
         if(transparency < 0) transparency = 0;
+    }
+
+    public void gameOver() {
+        transparency = 255;
+        buttons.setScore(score.getScore());
+        block.stop();
+        pipe.stop();
+        texteCalculus.setFini(true);
+        gameOver = true;
     }
 }

@@ -13,6 +13,7 @@ public class Score implements Sprite {
     Paint sharedPaint;
     int screen_height;
     int screen_width;
+    boolean visible = true;
 
     public Score(Context c, int w, int h) {
 
@@ -23,16 +24,18 @@ public class Score implements Sprite {
     }
 
     public void onDraw(Canvas canvas) {
-        sharedPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
-        sharedPaint.setTextAlign(Paint.Align.CENTER);
-        sharedPaint.setTextSize(40);
-        sharedPaint.setColor(0xFFFFFFFF);
-        sharedPaint.setShadowLayer(2, -1, -1, 0xFF000000);
-        canvas.drawText(Integer.toString(score), screen_width - 50, 50,
-                sharedPaint);
-        sharedPaint.setShadowLayer(2,1,1, 0xFF000000);
-        canvas.drawText(Integer.toString(score) , screen_width - 50 , 50,
-                sharedPaint);
+        if(visible) {
+            sharedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            sharedPaint.setTextAlign(Paint.Align.CENTER);
+            sharedPaint.setTextSize(40);
+            sharedPaint.setColor(0xFFFFFFFF);
+            sharedPaint.setShadowLayer(2, -1, -1, 0xFF000000);
+            canvas.drawText(Integer.toString(score), screen_width - 50, 50,
+                    sharedPaint);
+            sharedPaint.setShadowLayer(2, 1, 1, 0xFF000000);
+            canvas.drawText(Integer.toString(score), screen_width - 50, 50,
+                    sharedPaint);
+        }
     }
 
     public int getScore() {
@@ -41,6 +44,10 @@ public class Score implements Sprite {
 
     public void setScore(int s){
         this.score = s;
+    }
+
+    public void setVisibility(boolean v){
+        this.visible = v;
     }
 
 }
