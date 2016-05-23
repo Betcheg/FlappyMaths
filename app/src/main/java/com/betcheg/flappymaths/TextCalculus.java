@@ -44,20 +44,7 @@ public class TextCalculus implements Sprite{
     @Override
     public void onDraw(Canvas canvas) {
         if (!fini) {
-          /*
-            c1 = c.getResources().getDrawable(drawable_numbers[expression[0]]);
-            e1 = c.getResources().getDrawable(drawable_symbols[expression[1]]);
-            c2 = c.getResources().getDrawable(drawable_numbers[expression[2]]);
 
-            c1.setBounds((int) (screen_width / 2 - 1.5 * width), screen_height / 2 - height / 2, (int) (screen_width / 2 - 0.5 * width), screen_height / 2 + height / 2);
-            e1.setBounds((int) (screen_width / 2 - 0.5 * width), screen_height / 2 - height / 2, (int) (screen_width / 2 + 0.5 * width), screen_height / 2 + height / 2);
-            c2.setBounds((int) (screen_width / 2 + 0.5 * width), screen_height / 2 - height / 2, (int) (screen_width / 2 + 1.5 * width), screen_height / 2 + height / 2);
-
-            c1.draw(canvas);
-            e1.draw(canvas);
-            c2.draw(canvas); */
-
-            // sharedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             sharedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             sharedPaint.setTextAlign(Paint.Align.CENTER);
             sharedPaint.setTextSize(width + 40);

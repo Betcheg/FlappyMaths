@@ -33,12 +33,12 @@ public class Pipe implements Sprite {
         screen_width = w;
         screen_height = h;
         speed = (0.005)*screen_width;
+        pipe = c.getResources().getDrawable(R.drawable.stone);
+        pipe2 = c.getResources().getDrawable(R.drawable.stone);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
-        pipe = c.getResources().getDrawable(R.drawable.stone);
-        pipe2 = c.getResources().getDrawable(R.drawable.stone);
         pipe.setBounds(x,-3, x+width, p1height);
         pipe2.setBounds(x, screen_height -p2height, x + width, screen_height+3);
         pipe.draw(canvas);

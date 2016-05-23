@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.TextPaint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
 
@@ -29,6 +30,8 @@ public class Game extends LinearLayout {
     private Block block;
     private TextCalculus texteCalculus;
     private Score score;
+    private ButtonReplay buttonReplay;
+
     private boolean scorePasEncoreCompte = false;
 
     private int random;
@@ -69,6 +72,8 @@ public class Game extends LinearLayout {
         sprites.add(texteCalculus);
         score = new Score(c, (int) SCREEN_WIDTH , (int) SCREEN_HEIGHT);
         sprites.add(score);
+        buttonReplay = new ButtonReplay(c, (int) SCREEN_WIDTH , (int) SCREEN_HEIGHT);
+        sprites.add(buttonReplay);
 
         setWillNotDraw(false); // Will call onDraw();
 
@@ -77,11 +82,18 @@ public class Game extends LinearLayout {
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        if(event.getAction() == MotionEvent.ACTION_DOWN && screenPressed == false && !gameOver)
+        if(event.getAction() == MotionEvent.ACTION_DOWN && screenPressed == false)
         {
             screenPressed = true;
-            // The bird should not jump higher than screen size + jump size
-            if(bird.getY() > -bird.getHeight()) bird.jump();
+
+            if(!gameOver) {
+                // The bird should not jump higher than screen size + jump size
+                if (bird.getY() > -bird.getHeight()) bird.jump();
+            }
+            else {
+                if (buttonReplay.isAnimationFinished() && buttonReplay.isTouched(event))
+                    restart();
+            }
         }
 
         else if(event.getAction() == MotionEvent.ACTION_UP) {
@@ -132,19 +144,27 @@ public class Game extends LinearLayout {
                     transparency = 255;
                     block.stop();
                     pipe.stop();
+                    texteCalculus.setFini(true);
                 }
             }
+
+            if(bird.getY()+bird.getHeight() > SCREEN_HEIGHT)  {
+                gameOver = true;
+                transparency = 255;
+                block.stop();
+                pipe.stop();
+                texteCalculus.setFini(true);
+            }
+
             if (bird.getX() >= block.getX() + block.getWidth() && scorePasEncoreCompte) {
                 score.setScore(score.getScore() + 1);
                 scorePasEncoreCompte = false;
             }
         }
         else {
-            canvas.drawColor(Color.argb(transparency, 255, 255, 255));
-            transparency -=20;
-            if(transparency < 0) transparency = 0;
+            flashScreen(canvas);
             if (bird.getY() > SCREEN_HEIGHT){
-                gameOver();
+                if (!buttonReplay.isAnimated()) buttonReplay.animate();
             }
         }
         invalidate(); // Will loop onDraw
@@ -215,7 +235,7 @@ public class Game extends LinearLayout {
     }
 
 
-    public void gameOver(){
+    public void restart(){
         bird.setCurrentHeight((int) (SCREEN_HEIGHT / 2));
         bird.jump();
         score.setScore(0);
@@ -226,6 +246,13 @@ public class Game extends LinearLayout {
         block.restart();
         pipe.restart();
         difficulty = 1;
+        buttonReplay.reset();
         gameOver = false;
+    }
+
+    public void flashScreen(Canvas canvas){
+        canvas.drawColor(Color.argb(transparency, 255, 255, 255));
+        transparency -=20;
+        if(transparency < 0) transparency = 0;
     }
 }

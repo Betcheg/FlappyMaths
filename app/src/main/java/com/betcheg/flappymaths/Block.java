@@ -153,6 +153,7 @@ public class Block implements Sprite{
     public int getYnoCollision(){
          return startY + blockWithGoodValue * height;
     }
+
     public void setGoodValue(int g){
         this.goodValue=g;
         if(this.values[0] == g) blockWithGoodValue = 0;
@@ -162,6 +163,10 @@ public class Block implements Sprite{
 
     public void stop(){
         this.speed = 0;
+    }
+
+    public double getSpeed(){
+        return this.speed;
     }
 
     public void restart(){
