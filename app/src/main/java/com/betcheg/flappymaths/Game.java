@@ -30,7 +30,7 @@ public class Game extends LinearLayout {
     private Block block;
     private TextCalculus texteCalculus;
     private Score score;
-    private ButtonReplay buttonReplay;
+    private ButtonReplay buttons;
 
     private boolean scorePasEncoreCompte = false;
 
@@ -72,8 +72,8 @@ public class Game extends LinearLayout {
         sprites.add(texteCalculus);
         score = new Score(c, (int) SCREEN_WIDTH , (int) SCREEN_HEIGHT);
         sprites.add(score);
-        buttonReplay = new ButtonReplay(c, (int) SCREEN_WIDTH , (int) SCREEN_HEIGHT);
-        sprites.add(buttonReplay);
+        buttons = new ButtonReplay(c, (int) SCREEN_WIDTH , (int) SCREEN_HEIGHT);
+        sprites.add(buttons);
 
         setWillNotDraw(false); // Will call onDraw();
 
@@ -91,7 +91,7 @@ public class Game extends LinearLayout {
                 if (bird.getY() > -bird.getHeight()) bird.jump();
             }
             else {
-                if (buttonReplay.isAnimationFinished() && buttonReplay.isTouched(event))
+                if (buttons.isAnimationFinished() && buttons.isReplayTouched(event))
                     restart();
             }
         }
@@ -148,7 +148,7 @@ public class Game extends LinearLayout {
                 }
             }
 
-            if(bird.getY()+bird.getHeight() > SCREEN_HEIGHT)  {
+            if(bird.getY() > SCREEN_HEIGHT)  {
                 gameOver = true;
                 transparency = 255;
                 block.stop();
@@ -164,7 +164,7 @@ public class Game extends LinearLayout {
         else {
             flashScreen(canvas);
             if (bird.getY() > SCREEN_HEIGHT){
-                if (!buttonReplay.isAnimated()) buttonReplay.animate();
+                if (!buttons.isAnimated()) buttons.animate();
             }
         }
         invalidate(); // Will loop onDraw
@@ -246,7 +246,7 @@ public class Game extends LinearLayout {
         block.restart();
         pipe.restart();
         difficulty = 1;
-        buttonReplay.reset();
+        buttons.reset();
         gameOver = false;
     }
 
