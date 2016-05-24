@@ -141,12 +141,28 @@ public class ButtonReplay implements Sprite{
     public boolean isAnimationFinished(){
         return this.endAnimation;
     }
+
     public boolean isReplayTouched(MotionEvent event){
         if(event.getRawX() >= x[REPLAY] && event.getRawX() <= x[REPLAY]+width[REPLAY] && event.getRawY() >= y[REPLAY] && event.getRawY() <= y[REPLAY] +height[REPLAY])
             return true;
         else
             return false;
     }
+
+    public boolean isLeaderBoardTouched(MotionEvent event){
+        if(event.getRawX() >= x[HIGHSCORE] && event.getRawX() <= x[HIGHSCORE]+width[HIGHSCORE] && event.getRawY() >= y[HIGHSCORE] && event.getRawY() <= y[HIGHSCORE] +height[HIGHSCORE ])
+            return true;
+        else
+            return false;
+    }
+
+    public boolean isShopTouched(MotionEvent event){
+        if(event.getRawX() >= x[SHOP] && event.getRawX() <= x[SHOP]+width[SHOP] && event.getRawY() >= y[SHOP] && event.getRawY() <= y[SHOP] +height[SHOP ])
+            return true;
+        else
+            return false;
+    }
+
 
     public void setScore(int s){
         this.score = s;

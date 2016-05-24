@@ -27,9 +27,6 @@ public class Block implements Sprite{
     Paint sharedPaint;
     boolean visible = true;
 
-    protected int[] drawable_numbers = new int[]{ R.drawable.zero , R.drawable.one, R.drawable.two,
-            R.drawable.three, R.drawable.four, R.drawable.five, R.drawable.six, R.drawable.seven, R.drawable.eight, R.drawable.nine};
-
     int numbers = 2;
     boolean outofCamera = true;
     boolean fixedValue = false;

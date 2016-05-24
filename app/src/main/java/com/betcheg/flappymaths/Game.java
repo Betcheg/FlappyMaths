@@ -11,6 +11,7 @@ import android.text.TextPaint;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -21,6 +22,11 @@ import java.util.LinkedList;
 
 public class Game extends LinearLayout {
 
+    int GAME = 0;
+    int MENU = 1;
+    int LEADERBOARD = 2;
+    int SHOP = 3;
+    int currentScreen;
 
     protected double SCREEN_WIDTH = 0;
     protected double SCREEN_HEIGHT = 0;
@@ -32,6 +38,7 @@ public class Game extends LinearLayout {
     private TextCalculus texteCalculus;
     private Score score;
     private ButtonReplay buttons;
+    private LeaderBoard lb;
 
     private boolean scorePasEncoreCompte = false;
 
@@ -76,6 +83,9 @@ public class Game extends LinearLayout {
         buttons = new ButtonReplay(c, (int) SCREEN_WIDTH , (int) SCREEN_HEIGHT);
         sprites.add(buttons);
 
+        // Will be add later
+        lb = new LeaderBoard(c, (int) SCREEN_WIDTH , (int) SCREEN_HEIGHT);
+
         setWillNotDraw(false); // Will call onDraw();
 
     }
@@ -92,8 +102,24 @@ public class Game extends LinearLayout {
                 if (bird.getY() > -bird.getHeight()) bird.jump();
             }
             else {
-                if (buttons.isAnimationFinished() && buttons.isReplayTouched(event))
+                if (buttons.isAnimationFinished() && buttons.isReplayTouched(event) && currentScreen==MENU) {
                     restart();
+                }
+                else if(buttons.isAnimationFinished() && buttons.isLeaderBoardTouched(event) && currentScreen==MENU){
+                    sprites.add(lb);
+                    lb.start();
+                    currentScreen = LEADERBOARD;
+                }
+                else if(buttons.isAnimationFinished() && buttons.isShopTouched(event) && currentScreen==MENU){
+                    Toast.makeText(c, "Coming soon!", Toast.LENGTH_SHORT).show();
+                }
+
+                else if(lb.isAnimationFinished() && lb.isCloseTouched(event) && currentScreen==LEADERBOARD){
+                    sprites.remove(lb);
+                    currentScreen = MENU;
+                    lb.reset();
+                }
+
             }
         }
 
@@ -245,6 +271,7 @@ public class Game extends LinearLayout {
         score.setVisibility(true);
         block.setVisibility(true);
         gameOver = false;
+        currentScreen = GAME;
     }
 
     public void flashScreen(Canvas canvas){
@@ -260,5 +287,6 @@ public class Game extends LinearLayout {
         pipe.stop();
         texteCalculus.setFini(true);
         gameOver = true;
+        currentScreen = MENU;
     }
 }
