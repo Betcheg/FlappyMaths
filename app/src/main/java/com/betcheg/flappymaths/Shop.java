@@ -28,11 +28,22 @@ public class Shop implements Sprite {
     int FLAPPY_DARK = 4;
     int FLAPPY_REICH = 5;
     int FLAPPY_GOLD = 6;
-    int LAST_FLAPPY = FLAPPY_GOLD;
+    int FLAPPY_POPO = 7;
+    int FLAPPY_PHANTOM = 8;
+    int FLAPPY_HOLY = 9;
+    int FLAPPY_SHARK = 10;
+    int FLAPPY_UNKNOWN = 11;
+    int FLAPPY_UNKNOWN2 = 12;
+    int FLAPPY_UNKNOWN3 = 13;
+
+    int LAST_FLAPPY = FLAPPY_UNKNOWN3;
 
     int numberOfElement = LAST_FLAPPY+1;
 
-    int flappys[] = new int[] {R.drawable.img_bird_red_1, R.drawable.flappygay, R.drawable.darkflappy, R.drawable.flappyreich, R.drawable.flappygold};
+    int flappys[] = new int[] {R.drawable.img_bird_red_1, R.drawable.flappygay, R.drawable.darkflappy, R.drawable.flappyreich, R.drawable.flappygold
+            , R.drawable.flappypopo, R.drawable.fantomflappy, R.drawable.holyflappy, R.drawable.flappyshark
+            ,R.drawable.flappy_unknown,R.drawable.flappy_unknown,R.drawable.flappy_unknown};
+
     Drawable flappys_drawable[] = new Drawable[LAST_FLAPPY - FLAPPY_ORIGINAL];
     int indiceFlappy = FLAPPY_ORIGINAL;
 
@@ -76,14 +87,14 @@ public class Shop implements Sprite {
             elements[i] = c.getResources().getDrawable(flappys[i-FLAPPY_ORIGINAL]);
         }
 
-        for(int i=0; i < 3; i++){
+        for(int i=0; i < 4; i++){
 
             for(int j=0; j < 3; j++){
                 if(indiceFlappy <= LAST_FLAPPY) {
-                    this.y[indiceFlappy] = y[BACKGROUND] + 100 + 50 * i;
                     this.width[indiceFlappy] = c.getResources().getDrawable(flappys[indiceFlappy-FLAPPY_ORIGINAL]).getIntrinsicWidth();
                     this.height[indiceFlappy] = c.getResources().getDrawable(flappys[indiceFlappy-FLAPPY_ORIGINAL]).getIntrinsicHeight();
                     this.x[indiceFlappy] = (int) (screen_width / 2 + (j - 1) * this.width[indiceFlappy] + (j - 1) * 50 - this.width[indiceFlappy] / 2);
+                    this.y[indiceFlappy] = y[BACKGROUND] + 100 + 80 * i - this.height[indiceFlappy]/2;
                     indiceFlappy++;
                 }
             }
@@ -136,10 +147,10 @@ public class Shop implements Sprite {
 
         indiceFlappy = FLAPPY_ORIGINAL;
 
-        for(int i=0; i < 3; i++){
+        for(int i=0; i < 4; i++){
             for(int j=0; j < 3; j++){
                 if(indiceFlappy <= LAST_FLAPPY) {
-                    this.y[indiceFlappy] = y[BACKGROUND] + 100 + 50 * i;
+                    this.y[indiceFlappy] = y[BACKGROUND] + 100 + 80 * i - this.height[indiceFlappy]/2;
                     indiceFlappy++;
                 }
             }
