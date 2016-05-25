@@ -10,6 +10,10 @@ import android.util.Log;
  * Created by root on 22/05/16.
  */
 public class Bird implements Sprite {
+
+    int FLAPPY_NORMAL = 0;
+    int FLAPPY_GAY = 1;
+
     int x = 30;
     int height_bird;
     int width_bird;
@@ -18,9 +22,12 @@ public class Bird implements Sprite {
     Context c;
     float i;
     Drawable bird;
+    int currentBird = FLAPPY_NORMAL;
 
-    protected int[] birds = new int[]{ R.drawable.img_bird_red_1, R.drawable.img_bird_red_2,
-            R.drawable.img_bird_red_3 };
+    protected int[][] birds = new int[][]{ {R.drawable.img_bird_red_1, R.drawable.img_bird_red_2,
+            R.drawable.img_bird_red_3}, {R.drawable.flappygay, R.drawable.flappygay2,
+            R.drawable.flappygay3} };
+
     protected Drawable drawable_bird;
 
     public Bird(Context c, int w, int l){
@@ -28,15 +35,15 @@ public class Bird implements Sprite {
         current_height = 70;
 
         Resources res = c.getResources();
-        drawable_bird = res.getDrawable(birds[(int)i]);
-        width_bird = res.getDrawable(birds[(int)i]).getIntrinsicWidth();
-        height_bird = res.getDrawable(birds[(int)i]).getIntrinsicHeight();
+        drawable_bird = res.getDrawable(birds[0][(int)i]);
+        width_bird = res.getDrawable(birds[0][(int)i]).getIntrinsicWidth();
+        height_bird = res.getDrawable(birds[0][(int)i]).getIntrinsicHeight();
         i = 0;
     }
 
     @Override
     public void onDraw(Canvas canvas) {
-        bird = c.getResources().getDrawable(birds[(int)i]);
+        bird = c.getResources().getDrawable(birds[currentBird][(int)i]);
         bird.setBounds(x, current_height, x + width_bird, current_height + height_bird);
         bird.draw(canvas);
 
@@ -66,6 +73,9 @@ public class Bird implements Sprite {
         return height_bird;
     }
 
+    public void setBird(int b){
+        this.currentBird = b;
+    }
 
 
     public int getY() {

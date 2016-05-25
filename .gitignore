@@ -7,3 +7,4 @@
 /build
 /captures
 php/*
+app/src/main/java/com/betcheg/flappymaths/LeaderBoard.java

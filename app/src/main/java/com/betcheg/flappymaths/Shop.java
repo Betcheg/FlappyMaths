@@ -2,6 +2,7 @@ package com.betcheg.flappymaths;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -17,14 +18,25 @@ import java.net.URL;
 /**
  * Created by betcheg on 24/05/16.
  */
-public class LeaderBoard implements Sprite {
+public class Shop implements Sprite {
+
 
     int BACKGROUND = 0;
     int CROSS = 1;
+    int FLAPPY_ORIGINAL = 2;
+    int FLAPPY_GAY = 3;
+    int FLAPPY_DARK = 4;
+    int FLAPPY_REICH = 5;
+    int LAST_FLAPPY = FLAPPY_REICH;
 
-    int numberOfElement = 2;
+    int numberOfElement = LAST_FLAPPY;
+
+    int flappys[] = new int[] {R.drawable.img_bird_red_1, R.drawable.flappygay, R.drawable.darkflappy, R.drawable.flappyreich};
+    Drawable flappys_drawable[] = new Drawable[LAST_FLAPPY - FLAPPY_ORIGINAL];
+    int indiceFlappy = FLAPPY_ORIGINAL;
 
     Drawable elements[] = new Drawable[numberOfElement];
+    Paint sharedPaint;
 
     Context c;
     int screen_width;
@@ -37,10 +49,7 @@ public class LeaderBoard implements Sprite {
     boolean animate;
     boolean endAnimation;
 
-    String source = "empty";
-    boolean connected = false;
-
-    public LeaderBoard(Context c, int w, int h) {
+    public Shop(Context c, int w, int h) {
         this.c = c;
         this.screen_width = w;
         this.screen_height = h;
@@ -61,6 +70,25 @@ public class LeaderBoard implements Sprite {
 
         elements[BACKGROUND] = c.getResources().getDrawable(R.drawable.backgroundlb);
         elements[CROSS] = c.getResources().getDrawable(R.drawable.cross);
+
+        for(int i=0; i<LAST_FLAPPY-FLAPPY_ORIGINAL; i++){
+            elements[i] = c.getResources().getDrawable(flappys[i]);
+        }
+
+        for(int i=0; i < 3; i++){
+
+            for(int j=0; i < 3; i++){
+                //  76 = bottom Y of SHOP
+                if(indiceFlappy < LAST_FLAPPY) {
+                    this.y[indiceFlappy] = y[BACKGROUND] + 100 + 50 * i;
+                    this.width[indiceFlappy] = c.getResources().getDrawable(flappys[indiceFlappy]).getIntrinsicWidth();
+                    this.height[indiceFlappy] = c.getResources().getDrawable(flappys[indiceFlappy]).getIntrinsicHeight();
+                    this.x[indiceFlappy] = (int) (screen_width / 2 + (j - 1) * this.width[indiceFlappy] + (j - 1) * 50 - this.width[indiceFlappy] / 2);
+                    indiceFlappy++;
+                }
+            }
+
+        }
     }
 
     @Override
@@ -73,10 +101,26 @@ public class LeaderBoard implements Sprite {
             endAnimation = true;
         }
 
+
+
         for (int i=0; i<numberOfElement; i++) {
             elements[i].setBounds(x[i], y[i], x[i] + width[i], y[i] + height[i]);
             elements[i].draw(canvas);
         }
+
+
+        /* Draw Shop */
+        sharedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        sharedPaint.setTextAlign(Paint.Align.CENTER);
+        sharedPaint.setTextSize(26);
+        sharedPaint.setColor(0xFFFFFFFF);
+        sharedPaint.setShadowLayer(2, -1, -1, 0xFF000000);
+        canvas.drawText("SHOP", screen_width / 2 , y[BACKGROUND] + 50,
+                sharedPaint);
+        sharedPaint.setShadowLayer(2, 1, 1, 0xFF000000);
+        canvas.drawText("SHOP", screen_width / 2, y[BACKGROUND] + 50,
+                sharedPaint);
+
     }
 
     public void start(){
@@ -92,7 +136,7 @@ public class LeaderBoard implements Sprite {
     }
 
     public boolean isAnimationFinished(){
-       return this.endAnimation;
+        return this.endAnimation;
     }
 
     public void setAnimated(boolean b){
@@ -105,65 +149,6 @@ public class LeaderBoard implements Sprite {
         else
             return false;
     }
-
-    public class getLeaderBoard extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            String link = "http://kaxu.url.ph/get.php";
-
-            try {
-                URL myurl=new URL(link);
-                HttpURLConnection urlConnection = (HttpURLConnection) myurl.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setDoInput(true);
-                urlConnection.connect();
-                InputStream is=urlConnection.getInputStream();
-                if (is != null) {
-                    StringBuilder sb = new StringBuilder();
-                    String line;
-                    try {
-                        BufferedReader reader = new BufferedReader(
-                                new InputStreamReader(is));
-                        while ((line = reader.readLine()) != null) {
-                            sb.append(line);
-                        }
-                        reader.close();
-                    } finally {
-                        is.close();
-                    }
-                    source = sb.toString();
-                }
-            }catch (Exception e){
-                source=null;
-            }
-
-            connected = (source!=null);
-            return source;
-        }
-
-        @Override
-        protected void onPostExecute(String v) {
-
-            if(!connected){
-
-                Toast.makeText(c, "Not connected to the internet!", Toast.LENGTH_SHORT).show();
-            Log.i("erreur","erreur");
-            }
-            else {
-                Toast.makeText(c, "...Loading...", Toast.LENGTH_SHORT).show();
-                Log.i("source:", source);
-            }
-
-
-        }
-    }
-
-    public void httpGet(){
-        new getLeaderBoard().execute();
-    }
-
 
 }
 

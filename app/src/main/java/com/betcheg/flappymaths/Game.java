@@ -39,6 +39,7 @@ public class Game extends LinearLayout {
     private Score score;
     private ButtonReplay buttons;
     private LeaderBoard lb;
+    private Shop shop;
 
     private boolean scorePasEncoreCompte = false;
 
@@ -85,6 +86,7 @@ public class Game extends LinearLayout {
 
         // Will be add later
         lb = new LeaderBoard(c, (int) SCREEN_WIDTH , (int) SCREEN_HEIGHT);
+        shop = new Shop(c, (int) SCREEN_WIDTH , (int) SCREEN_HEIGHT);
 
         setWillNotDraw(false); // Will call onDraw();
 
@@ -109,15 +111,27 @@ public class Game extends LinearLayout {
                     sprites.add(lb);
                     lb.start();
                     currentScreen = LEADERBOARD;
+                    lb.httpGet();
                 }
                 else if(buttons.isAnimationFinished() && buttons.isShopTouched(event) && currentScreen==MENU){
                     Toast.makeText(c, "Coming soon!", Toast.LENGTH_SHORT).show();
+                    currentScreen = SHOP;
+                    bird.setBird(1);
+                    sprites.add(shop);
+                    shop.start();
+
                 }
 
                 else if(lb.isAnimationFinished() && lb.isCloseTouched(event) && currentScreen==LEADERBOARD){
                     sprites.remove(lb);
                     currentScreen = MENU;
                     lb.reset();
+                }
+
+                else if(shop.isAnimationFinished() && shop.isCloseTouched(event) && currentScreen==SHOP){
+                    sprites.remove(shop);
+                    currentScreen = MENU;
+                    shop.reset();
                 }
 
             }
