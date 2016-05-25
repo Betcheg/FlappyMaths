@@ -27,15 +27,16 @@ public class Shop implements Sprite {
     int FLAPPY_GAY = 3;
     int FLAPPY_DARK = 4;
     int FLAPPY_REICH = 5;
-    int LAST_FLAPPY = FLAPPY_REICH;
+    int FLAPPY_GOLD = 6;
+    int LAST_FLAPPY = FLAPPY_GOLD;
 
     int numberOfElement = LAST_FLAPPY;
 
-    int flappys[] = new int[] {R.drawable.img_bird_red_1, R.drawable.flappygay, R.drawable.darkflappy, R.drawable.flappyreich};
+    int flappys[] = new int[] {R.drawable.img_bird_red_1, R.drawable.flappygay, R.drawable.darkflappy, R.drawable.flappyreich, R.drawable.flappygold};
     Drawable flappys_drawable[] = new Drawable[LAST_FLAPPY - FLAPPY_ORIGINAL];
     int indiceFlappy = FLAPPY_ORIGINAL;
 
-    Drawable elements[] = new Drawable[numberOfElement];
+    Drawable elements[] = new Drawable[numberOfElement+1];
     Paint sharedPaint;
 
     Context c;
@@ -71,18 +72,17 @@ public class Shop implements Sprite {
         elements[BACKGROUND] = c.getResources().getDrawable(R.drawable.backgroundlb);
         elements[CROSS] = c.getResources().getDrawable(R.drawable.cross);
 
-        for(int i=0; i<LAST_FLAPPY-FLAPPY_ORIGINAL; i++){
-            elements[i] = c.getResources().getDrawable(flappys[i]);
+        for(int i=FLAPPY_ORIGINAL; i<=LAST_FLAPPY; i++){
+            elements[i] = c.getResources().getDrawable(flappys[i-FLAPPY_ORIGINAL]);
         }
 
         for(int i=0; i < 3; i++){
 
-            for(int j=0; i < 3; i++){
-                //  76 = bottom Y of SHOP
+            for(int j=0; j < 3; j++){
                 if(indiceFlappy < LAST_FLAPPY) {
                     this.y[indiceFlappy] = y[BACKGROUND] + 100 + 50 * i;
-                    this.width[indiceFlappy] = c.getResources().getDrawable(flappys[indiceFlappy]).getIntrinsicWidth();
-                    this.height[indiceFlappy] = c.getResources().getDrawable(flappys[indiceFlappy]).getIntrinsicHeight();
+                    this.width[indiceFlappy] = c.getResources().getDrawable(flappys[indiceFlappy-FLAPPY_ORIGINAL]).getIntrinsicWidth();
+                    this.height[indiceFlappy] = c.getResources().getDrawable(flappys[indiceFlappy-FLAPPY_ORIGINAL]).getIntrinsicHeight();
                     this.x[indiceFlappy] = (int) (screen_width / 2 + (j - 1) * this.width[indiceFlappy] + (j - 1) * 50 - this.width[indiceFlappy] / 2);
                     indiceFlappy++;
                 }
@@ -95,8 +95,9 @@ public class Shop implements Sprite {
     public void onDraw(Canvas canvas) {
 
         if (this.y[BACKGROUND] > (screen_height / 2 - height[BACKGROUND]/2) && animate) {
-            y[BACKGROUND] -= speed;
-            y[CROSS] -= speed;
+            for(int i = 0; i<numberOfElement; i++) {
+                y[i] -= speed;
+            }
         } else {
             endAnimation = true;
         }
@@ -106,6 +107,7 @@ public class Shop implements Sprite {
         for (int i=0; i<numberOfElement; i++) {
             elements[i].setBounds(x[i], y[i], x[i] + width[i], y[i] + height[i]);
             elements[i].draw(canvas);
+
         }
 
 
