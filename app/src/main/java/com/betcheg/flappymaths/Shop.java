@@ -30,7 +30,7 @@ public class Shop implements Sprite {
     int FLAPPY_GOLD = 6;
     int LAST_FLAPPY = FLAPPY_GOLD;
 
-    int numberOfElement = LAST_FLAPPY;
+    int numberOfElement = LAST_FLAPPY+1;
 
     int flappys[] = new int[] {R.drawable.img_bird_red_1, R.drawable.flappygay, R.drawable.darkflappy, R.drawable.flappyreich, R.drawable.flappygold};
     Drawable flappys_drawable[] = new Drawable[LAST_FLAPPY - FLAPPY_ORIGINAL];
@@ -79,7 +79,7 @@ public class Shop implements Sprite {
         for(int i=0; i < 3; i++){
 
             for(int j=0; j < 3; j++){
-                if(indiceFlappy < LAST_FLAPPY) {
+                if(indiceFlappy <= LAST_FLAPPY) {
                     this.y[indiceFlappy] = y[BACKGROUND] + 100 + 50 * i;
                     this.width[indiceFlappy] = c.getResources().getDrawable(flappys[indiceFlappy-FLAPPY_ORIGINAL]).getIntrinsicWidth();
                     this.height[indiceFlappy] = c.getResources().getDrawable(flappys[indiceFlappy-FLAPPY_ORIGINAL]).getIntrinsicHeight();
@@ -133,6 +133,18 @@ public class Shop implements Sprite {
     public void reset() {
         this.y[BACKGROUND] = screen_height;
         this.y[CROSS] = screen_height+10;
+
+        indiceFlappy = FLAPPY_ORIGINAL;
+
+        for(int i=0; i < 3; i++){
+            for(int j=0; j < 3; j++){
+                if(indiceFlappy <= LAST_FLAPPY) {
+                    this.y[indiceFlappy] = y[BACKGROUND] + 100 + 50 * i;
+                    indiceFlappy++;
+                }
+            }
+        }
+
         this.animate = false;
         this.endAnimation = true;
     }
