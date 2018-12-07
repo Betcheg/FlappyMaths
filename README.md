@@ -1,4 +1,4 @@
-# FlappyCalculus
+# Flappy Maths
 Yet another android flappy bird clone made with java 
 
 
